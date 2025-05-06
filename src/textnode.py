@@ -48,3 +48,22 @@ def text_node_to_html_node(text_node):
 
     else:
         raise ValueError("None of defined types")
+
+
+def split_nodes_delimiter(old_nodes, delimiter, text_type):
+    split_nodes = []
+    for node in old_nodes:
+        if node.text_type != TextType.TEXT:
+            split_nodes.append(node)
+        else:
+            splits = node.text.split(delimiter)
+            if len(splits) % 2 == 0:
+                raise Exception("invalid markdown: no matching delimiter")
+
+            for i, split in enumerate(splits):
+                if i % 2 == 0:
+                    split_nodes.append(TextNode(split, text_type=TextType.TEXT))
+                else:
+                    split_nodes.append(TextNode(split, text_type=text_type))
+
+    return split_nodes
