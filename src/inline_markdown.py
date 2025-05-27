@@ -142,7 +142,6 @@ def text_to_textnodes(text):
     new_nodes = [node_to_split]
     for key, value in delimiters.items():
         new_nodes = split_nodes_delimiter(new_nodes, key, value)
-        print(f"key = {key}, value = {value}: {new_nodes}")
 
     new_nodes = split_nodes_link(new_nodes)
     new_nodes = split_nodes_image(new_nodes)
