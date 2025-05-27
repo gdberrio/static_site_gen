@@ -41,6 +41,9 @@ def extract_markdown_links(text):
 def split_nodes_image(old_nodes):
     split_nodes = []
     for node in old_nodes:
+        if node.text_type != TextType.TEXT:
+            split_nodes.append(node)
+            continue
         new_nodes = []
         node_text = node.text
         while len(node_text) > 0:
@@ -87,6 +90,9 @@ def split_nodes_image(old_nodes):
 def split_nodes_link(old_nodes):
     split_nodes = []
     for node in old_nodes:
+        if node.text_type != TextType.TEXT:
+            split_nodes.append(node)
+            continue
         new_nodes = []
         node_text = node.text
         while len(node_text) > 0:
@@ -128,3 +134,16 @@ def split_nodes_link(old_nodes):
         split_nodes.extend(new_nodes)
 
     return split_nodes
+
+
+def text_to_textnodes(text):
+    node_to_split = TextNode(text=text, text_type=TextType.TEXT)
+    delimiters = {"**": TextType.BOLD, "_": TextType.ITALIC, "`": TextType.CODE}
+    new_nodes = [node_to_split]
+    for key, value in delimiters.items():
+        new_nodes = split_nodes_delimiter(new_nodes, key, value)
+        print(f"key = {key}, value = {value}: {new_nodes}")
+
+    new_nodes = split_nodes_link(new_nodes)
+    new_nodes = split_nodes_image(new_nodes)
+    return new_nodes
