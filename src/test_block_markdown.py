@@ -70,12 +70,12 @@ This is the same paragraph on a new line
     def test_block_to_block_type_unordered_list(self):
         block = "- First item\n- Second item\n- Third item"
         result = block_to_block_type(block)
-        self.assertEqual(result, BlockType.UNORDERED_LIST)
+        self.assertEqual(result, BlockType.ULIST)
 
     def test_block_to_block_type_ordered_list(self):
         block = "1. First item\n2. Second item\n3. Third item"
         result = block_to_block_type(block)
-        self.assertEqual(result, BlockType.ORDERED_LIST)
+        self.assertEqual(result, BlockType.OLIST)
 
 
 if __name__ == "__main__":

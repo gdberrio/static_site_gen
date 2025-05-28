@@ -1,3 +1,4 @@
+import re
 from enum import Enum
 
 
@@ -6,8 +7,8 @@ class BlockType(Enum):
     HEADING = "heading"
     CODE = "code"
     QUOTE = "quote"
-    UNORDERED_LIST = "unordered_list"
-    ORDERED_LIST = "ordered_list"
+    ULIST = "unordered_list"
+    OLIST = "ordered_list"
 
 
 def markdown_to_blocks(markdown):
@@ -23,12 +24,16 @@ def markdown_to_blocks(markdown):
 
 def block_to_block_type(markdown_block):
     block_splits = markdown_block.split("\n")
+    regex = "^(#{1,6}) "
     if block_splits[0] == "```" and block_splits[-1] == "```":
         return BlockType.CODE
-    elif all([block.startswith("> ") for block in block_splits]):
+    elif all(block.startswith("> ") for block in block_splits):
         return BlockType.QUOTE
-    elif all([block.startswith("- ") for block in block_splits]):
-        return BlockType.UNORDERED_LIST
-
+    elif all(block.startswith("- ") for block in block_splits):
+        return BlockType.ULIST
+    elif all(x[1].startswith(f"{x[0]+1}. ") for x in enumerate(block_splits)):
+        return BlockType.OLIST
+    elif re.match(regex, block_splits[0]):
+        return BlockType.HEADING
     else:
         return BlockType.PARAGRAPH
